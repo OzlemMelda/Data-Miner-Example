@@ -1,0 +1,40 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671
+{\fonttbl\f0\froman\fcharset0 TimesNewRomanPS-BoldMT;\f1\froman\fcharset0 TimesNewRomanPSMT;\f2\fswiss\fcharset0 Helvetica;
+}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\ri-340\sl360\slmult1\sa160\partightenfactor0
+
+\f0\b\fs24 \cf0 Introduction\
+\pard\pardeftab720\ri-340\sl360\slmult1\sa160\partightenfactor0
+
+\f1\b0 \cf0 Input files consist of train and test data sets. Before going into model building, data must be cleaned and processed since the accuracy of analysis and model building depends on the quality of data. Train data set has 190000 rows (samples) and 739 variables, and test data set includes 95000 rows and 739 variables. Data cleaning/processing includes searching for missing values in these sets or repetition in samples or searching for the effect of predictor variables on dependent one. After data were processed, model was built using rest of train data. Then, this model was used to predict dependent variable using predictor variables in test data set. This analysis was done under R. Detailed information is given in the following sections.\
+\pard\pardeftab720\ri-340\sl360\slmult1\sa160\partightenfactor0
+
+\f0\b \cf0 Data Analysis Process\
+\pard\pardeftab720\ri-340\sl360\slmult1\sa160\partightenfactor0
+
+\f1\b0 \cf0 First of all, missing values were checked for both train and test data if there is any. There are no missing values in both data sets. Next step is data cleaning process. Since model was built using train data set, variables to be removed from model building and prediction were determined using train data set. \
+Secondly, the predictor variables which have single values on train data set were detected and removed from data set since these variables have no variance and considerable effect on dependent variable. Same variables were removed from the test data set as well. \
+Before going into detailed predictor variable analysis, unique samples were extracted from train data set and row number (number of samples) decreased to 95000. Test data set has completely unique samples (rows). \
+As variable selection for model building, predictor variables were categorized into two groups which are categorical predictor variables and numerical predictor variables. This categorization was done as follows. Predictor variables which have integer values for all samples were grouped as categorical predictor variables. It can be seen that categorical predictor variables are binary since all data lies between 0 and 1, and categorical ones have 2 unique values. Rest of predictor variables were grouped as numerical predictor variables. \
+\
+It was said that columns with one unique value were removed from data sets since they don\'92t have variance. Categorical and numeric predictor variables having low variance were removed from data sets as well. Processes were stated as follows.\
+For numerical predictor variables, the variance in each column was calculated and the numerical predictor variables having variance lower than 0.01 were removed from train and test data since the variables with very low variance have low effect of dependent variable as well.\
+In order to remove the categorical predictor variables with low variance, occurrence data table was constructed. This data table consists of the names of categorical variables, the rate of occurrences of \'931\'94 in a column corresponding to categorical variable and the percentage representation of this ratio. If the percentage is higher than 90%, then corresponding column has \'931\'94 mostly. If the percentage is lower than 10%, then corresponding column has \'930\'94 mostly. These columns have low variance; therefore, they were removed from train and test data set.\
+Multicollinearity which represents intercorrelations between predictor variables was searched for numerical variables. Correlation matrix was constructed; then, predictor variable pairs which have correlation value more than 0.7 were detected. The effect of these predictor variables on response variable were examined using one-way ANOVA test. The predictor variables with lower p-value were removed from data sets.\
+Two different processes were applied to see the effects of two groups of predictor variables on dependent variable. For categorical predictor variables, chi-square independence test was applied for each pair of dependent variable and one of the categorical predictor variable. Chi-square independence test
+\f2\fs22  
+\f1\fs24 is used to determine if there is a significant relationship between two categorical variables. Variables having p-value higher than 0.1 were removed from train and test data sets since they do not have significant relationship with dependent variable. Additionally, the effects of numerical predictor variables on response variable were observed as well. One-way ANOVA test was applied using each numerical predictor variables, and numerical predictor variables having p-value lower than 0.1 were removed from data sets.\
+After data cleaning process, train and test data consist of 36 categorical predictor variables and 82 numerical predictor variables with 95000 samples (rows).\
+The number of remaining variables was found to be meaningful for the relatively large data at hand, therefore, dimensionality reduction methods such as PCA were not preferred.\
+\pard\pardeftab720\ri-340\sl360\slmult1\sa160\partightenfactor0
+
+\f0\b \cf0 Model Building\
+\pard\pardeftab720\ri-340\sl360\slmult1\sa160\partightenfactor0
+
+\f1\b0 \cf0 Model was built using logistic regression since the dependent variable is a categorical variable and the problem is about classification. \
+First of all, 80% of train data was randomly grouped as train_train and rest of it was grouped as train_test data in order to assess the performance of the model. Splitting data can result in columns which have only one value. These columns were detected and removed from train_train, train_test and test data sets. Then, a model was fitted using train_train data and two set of predictions were made using train_train and train_test data. ROC curve assesses fitted model if it is overfitting. If training data was overfitted, an overly optimistic estimate of the performance of the model will be made when the model is assessed with the training data itself. If the area under ROC curve calculated using train_train data is not much more than the one calculated using train_test data, then overfitting is not the case. Area under ROC curves were calculated for these two sets of predictions to detect overfitting if there is any. Areas under ROC curves are 0.6236 and 0.6115 for train_train and train_test data respectively. It can be deduced that there is no significant overfitting problem in this case since the areas under ROC curves are very close to each other.\
+Final model was built using train data set, and predictions were made under this fitted model, and written to a .txt file. The .txt file contains values range between 0 and 1.}
